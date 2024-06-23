@@ -40,7 +40,6 @@ export const SAVE_BOOK = gql`
         image
         link
       }
-      bookCount
     }
   }
 `;
