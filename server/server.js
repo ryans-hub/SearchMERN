@@ -22,7 +22,7 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   app.use('/graphql', expressMiddleware(server, {
-    context: authMiddleware
+    context: authMiddleware,
   }));
 
   if (process.env.NODE_ENV === 'production') {
@@ -33,6 +33,11 @@ const startApolloServer = async () => {
     });
   }
 
+  // Enhanced error handling for database connection
+  db.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+  });
+
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
@@ -42,4 +47,6 @@ const startApolloServer = async () => {
 };
 
 // Call the async function to start the server
-  startApolloServer();
+startApolloServer().catch((err) => {
+  console.error('Error starting Apollo Server:', err);
+});
